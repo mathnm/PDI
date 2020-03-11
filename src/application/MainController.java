@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import view.Pdi;
 
 public class MainController {
 	
@@ -26,12 +27,12 @@ public class MainController {
 	
 	@FXML
 	public void abreImagem1() {
-		abreImagem(imageView1, img1);
+		img1 = abreImagem(imageView1, img1);
 	}
 	
 	@FXML
 	public void abreImagem2() {
-		abreImagem(imageView2, img2);
+		img2 = abreImagem(imageView2, img2);
 	}
 	
 	private void atualizaImagem3() {
@@ -40,7 +41,7 @@ public class MainController {
 		imageView3.setFitWidth(img3.getWidth());
 	}
 	
-	private void abreImagem(ImageView imageView, Image image) {
+	private Image abreImagem(ImageView imageView, Image image) {
 		
 		File f = selecionaImagem();
 		if(f != null) {
@@ -48,8 +49,10 @@ public class MainController {
 			imageView.setImage(image);
 			imageView.setFitHeight(image.getHeight());
 			imageView.setFitWidth(image.getWidth());
+			
+			return image;
 		}
-		
+		return null;
 	}
 	
 	private File selecionaImagem() {
@@ -89,6 +92,12 @@ public class MainController {
 		 if(iw.getImage()!=null)
 			 verificaCor(iw.getImage(), (int)evt.getX(), (int)evt.getY());
 	  }
+	 
+	 @FXML
+	 public void cinzaAritmetica() {
+		 img3 = Pdi.cinzaMediaAritmetica(img1, 0, 0, 0);
+		 atualizaImagem3();
+	 }
 	
 	
 }
