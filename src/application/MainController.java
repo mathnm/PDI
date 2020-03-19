@@ -121,5 +121,11 @@ public class MainController {
 		 img3 = Pdi.limiarizacao(img1, limiar.getValue()/255);
 		 atualizaImagem3();
 	 }
+	 
+	 @FXML	 	 
+	 public void negativa() {
+		 img3 = Pdi.negativa(img1);
+		 atualizaImagem3();
+	 }
 	
 }

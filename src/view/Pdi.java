@@ -68,4 +68,32 @@ public class Pdi {
 		}
 	}
 	
+	public static Image negativa(Image imagem) {
+		try {
+			int w = (int)imagem.getWidth();
+			int h = (int)imagem.getHeight();
+			
+			PixelReader pr = imagem.getPixelReader();
+			WritableImage wi = new WritableImage(w, h);
+			PixelWriter pw = wi.getPixelWriter();
+
+			for (int i = 0; i < w; i++) {
+				for (int j = 0; j < h; j++) {
+					Color corA = pr.getColor(i, j);
+					Color corN = new Color (1 - corA.getRed(),
+											1 - corA.getGreen(),
+											1 - corA.getBlue(),
+											corA.getOpacity());
+					pw.setColor(i, j, corN);
+				}
+			}
+			
+			return wi;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
