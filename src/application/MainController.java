@@ -4,6 +4,7 @@ import java.io.File;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -30,6 +31,10 @@ public class MainController {
 	@FXML TextField pcr;
 	@FXML TextField pcg;
 	@FXML TextField pcb;
+	
+	@FXML RadioButton v3x3;
+	@FXML RadioButton vX;
+	@FXML RadioButton vCruz;
 	
 	@FXML Slider limiar;
 	
@@ -63,6 +68,7 @@ public class MainController {
 		return null;
 	}
 	
+	
 	private File selecionaImagem() {
 		   FileChooser fileChooser = new FileChooser();
 		   fileChooser.getExtensionFilters().add(new 
@@ -70,7 +76,7 @@ public class MainController {
 						   "Imagens", "*.jpg", "*.JPG", 
 						   "*.png", "*.PNG", "*.gif", "*.GIF", 
 						   "*.bmp", "*.BMP")); 	
-		   fileChooser.setInitialDirectory(new File("C:\\Users\\mathe\\Pictures\\imgPDI"));
+		   fileChooser.setInitialDirectory(new File("C:\\Users\\Matheus\\Pictures\\imgs pdi"));
 		   File imgSelec = fileChooser.showOpenDialog(null);
 		   try {
 			   if (imgSelec != null) {
@@ -126,6 +132,20 @@ public class MainController {
 	 public void negativa() {
 		 img3 = Pdi.negativa(img1);
 		 atualizaImagem3();
+	 }
+	 
+	 @FXML
+	 public void eliminaRuidos() {
+		 if(v3x3.isSelected()) {
+			 img3 = Pdi.ruidos(img1, 1);
+			 atualizaImagem3();
+		 }else if(vCruz.isSelected()) {
+			 img3 = Pdi.ruidos(img1, 2);
+			 atualizaImagem3();
+		 }else if(vX.isSelected()) {
+			 img3 = Pdi.ruidos(img1, 3);
+			 atualizaImagem3();
+		 }
 	 }
 	
 }
