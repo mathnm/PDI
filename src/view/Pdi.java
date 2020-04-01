@@ -252,4 +252,68 @@ public class Pdi {
 		return v;
 	}
 	
+	public static Image adicao(Image img1, Image img2, double ti1, double ti2) {
+		int w1 = (int)img1.getWidth();
+		int h1 = (int)img1.getHeight();
+		int w2 = (int)img2.getWidth();
+		int h2 = (int)img2.getHeight();
+		int w = Math.min(w1, w2);
+		int h = Math.min(h1, h2);
+		PixelReader pr1 = img1.getPixelReader();
+		PixelReader pr2 = img2.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		for (int i = 1; i < w; i++) {
+			for (int j = 1; j < h; j++) {
+				Color corImg1 = pr1.getColor(i, j);
+				Color corImg2 = pr2.getColor(i, j);
+				double r = (corImg1.getRed()*ti1)+(corImg2.getRed()+ti2);
+				double g = (corImg1.getGreen()*ti1)+(corImg2.getGreen()+ti2);
+				double b = (corImg1.getBlue()*ti1)+(corImg2.getBlue()+ti2);
+				r = r > 1 ? 1 : r;
+				g = g > 1 ? 1 : g;
+				b = b > 1 ? 1 : b;
+				
+				Color nCor = new Color (r,g,b,1);
+				pw.setColor(i, j, nCor);
+			}
+			
+		}
+		
+		return wi;
+		
+	}
+	
+	public static Image subtracao(Image img1, Image img2) {
+		int w1 = (int)img1.getWidth();
+		int h1 = (int)img1.getHeight();
+		int w2 = (int)img2.getWidth();
+		int h2 = (int)img2.getHeight();
+		int w = Math.min(w1, w2);
+		int h = Math.min(h1, h2);
+		PixelReader pr1 = img1.getPixelReader();
+		PixelReader pr2 = img2.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		for (int i = 1; i < w; i++) {
+			for (int j = 1; j < h; j++) {
+				Color vCor1 = pr1.getColor(i, j);
+				Color vCor2 = pr2.getColor(i, j);
+				double r = (vCor1.getRed())-(vCor2.getRed());
+				double g = (vCor1.getGreen())-(vCor2.getGreen());
+				double b = (vCor1.getBlue())-(vCor2.getBlue());
+				r = r < 0 ? 0 : r;
+				g = g < 0 ? 0 : g;
+				b = b < 0 ? 0 : b;
+				
+				Color nCor = new Color (r,g,b,vCor1.getOpacity());
+				pw.setColor(i, j, nCor);
+			}
+			
+		}
+		
+		return wi;
+		
+	}
+	
 }

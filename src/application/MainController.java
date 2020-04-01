@@ -1,7 +1,12 @@
 package application;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -37,6 +42,8 @@ public class MainController {
 	@FXML RadioButton vCruz;
 	
 	@FXML Slider limiar;
+	@FXML Slider ti1;
+	@FXML Slider ti2;
 	
 	@FXML
 	public void abreImagem1() {
@@ -147,5 +154,35 @@ public class MainController {
 			 atualizaImagem3();
 		 }
 	 }
+	 
+	 @FXML
+	 public void adiciona() {
+		 img3 = Pdi.adicao(img1, img2, ti1.getValue()/255, ti2.getValue()/255);
+		 atualizaImagem3();
+	 }
+	 
+	 @FXML
+	 public void subtrai() {
+		 img3 = Pdi.subtracao(img1, img2);
+		 atualizaImagem3();
+	 }
 	
+	 @FXML
+	 public void salvar() {
+		 if(img3 != null) {
+			 FileChooser fileChooser = new FileChooser();
+			 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imagem", "*.png"));
+			 fileChooser.setInitialDirectory(new File("C:\\Users\\Matheus\\Pictures\\imgs pdi"));
+			 File file = fileChooser.showSaveDialog(null);
+			 if(file != null) {
+				 BufferedImage bImg = SwingFXUtils.fromFXImage(img3, null);
+				 try {
+					 ImageIO.write(bImg, "PNG", file);
+				 } catch (IOException e) {
+					 e.printStackTrace();
+				 }
+			 }
+		 }
+	 }
+	 
 }
