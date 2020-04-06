@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import model.Pixel;
 import view.Pdi;
 
 public class MainController {
@@ -184,5 +185,46 @@ public class MainController {
 			 }
 		 }
 	 }
+	 
+	 int x1;
+	 int y1;
+	 int x2;
+	 int y2;
+	 Pixel pInicio;
+	 Pixel pFinal;
+	 
+	 @FXML
+	 public void marcarEntrada(MouseEvent evento) {
+	 	ImageView iv = (ImageView)evento.getTarget();
+	 	if(iv.getImage()!=null) {
+	 		 x1 = (int)evento.getX();
+	 		 y1 = (int)evento.getY();
+	 		 pInicio = verificaPixel(img1, x1, y1);
+	 	}
+	 	
+	 }
+	 
+	 @FXML 	
+	 public void marcarSaida(MouseEvent evento) {
+ 	 	ImageView iv = (ImageView)evento.getTarget();
+	 	if(iv.getImage()!=null) {
+	 		 x2 = (int)evento.getX();
+	 		 y2 = (int)evento.getY();
+	 		 pFinal = verificaPixel(img1, x2, y2);
+	 		 iv.setImage(Pdi.marcacao(img1, pInicio, pFinal));
+	 	}
+	 	
+	 }
+	 
+	 public Pixel verificaPixel(Image img, int x, int y){
+		  try {
+				Color cor = img.getPixelReader().getColor(x-1, y-1);
+				Pixel p = new Pixel(cor.getRed()*255, cor.getGreen()*255, cor.getBlue()*255, x, y);
+				return p;
+			} catch (Exception e) {
+				//e.printStackTrace();
+				return null;
+			}
+	  }
 	 
 }

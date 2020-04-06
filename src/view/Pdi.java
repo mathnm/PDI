@@ -316,4 +316,64 @@ public class Pdi {
 		
 	}
 	
+	public static Image marcacao(Image img, Pixel inicio, Pixel fim) {
+		try {
+			int w = (int)img.getWidth();
+			int h = (int)img.getHeight();
+			
+			PixelReader pr = img.getPixelReader();
+			WritableImage wi = new WritableImage(w, h);
+			PixelWriter pw = wi.getPixelWriter();
+
+			for (int i = 0; i < w; i++) {
+				for (int j = 0; j < h; j++) {
+					Color cor = pr.getColor(i, j);
+					Color marcacao = Color.CHARTREUSE;
+					pw.setColor(i, j, cor);
+					
+					int aux;
+					//VERIFICA DIREÇÃO E SENTIDO DO ARRASTO
+					if(inicio.y > fim.y) {
+						aux = inicio.y;
+						inicio.y = fim.y;
+						fim.y = aux;
+					}
+					
+					if(inicio.x > fim.x) {
+						aux = inicio.x;
+						inicio.x = fim.x;
+						fim.x = aux;
+					}
+										
+					
+					//COLUNA ESQUERDA
+					if (inicio.x == i && j >= inicio.y && j <= fim.y) {
+						pw.setColor(i, j, marcacao);
+					}
+					
+					//LINHA SUPERIOR
+					if (inicio.y == j && inicio.x <= i && fim.x >= i) {
+						pw.setColor(i, j, marcacao);
+					}
+					
+					//COLUNA DIREITA
+					if (fim.x == i && fim.y >= j && inicio.y <= j) {
+						pw.setColor(i, j, marcacao);
+					}
+					
+					//LINHA INFERIOR
+					if (fim.y == j && fim.x >= i && inicio.x <= i) {
+						pw.setColor(i, j, marcacao);
+					}
+				}
+			}
+			
+			return wi;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
