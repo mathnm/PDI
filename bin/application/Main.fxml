@@ -59,7 +59,7 @@
                         <Insets left="94.0" top="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" text="Histograma">
+                  <Button mnemonicParsing="false" onAction="#abreHistograma" text="Histograma">
                      <HBox.margin>
                         <Insets left="182.0" top="15.0" />
                      </HBox.margin>
