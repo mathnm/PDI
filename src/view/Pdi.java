@@ -405,4 +405,120 @@ public class Pdi {
 		return qt;
 	}
 	
+	public static Image equalizacaoHistograma(Image img, boolean todos) {
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		PixelReader pr = img.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		
+		int[] hR = histogramaCanal(img, "R");
+		int[] hG = histogramaCanal(img, "G");
+		int[] hB = histogramaCanal(img, "B");
+		
+		int[] histAcR = histogramaAc(hR);
+		int[] histAcG = histogramaAc(hG);
+		int[] histAcB = histogramaAc(hB);
+		
+		int qtTonsR = qtTons(hR);
+		int qtTonsG = qtTons(hG);
+		int qtTonsB = qtTons(hB);
+		
+		double minR = pontoMin(hR);
+		double minG = pontoMin(hG);
+		double minB = pontoMin(hB);
+		
+		if(todos) {
+			qtTonsR = 255;
+			qtTonsG = 255;
+			qtTonsB = 255;
+			minR = 0;
+			minG = 0;
+			minB = 0;
+		}
+		
+		double n = w*h;
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				Color corAntiga = pr.getColor(i, j);
+				
+				double acR = histAcR[(int)(corAntiga.getRed()*255)];
+				double acG = histAcG[(int)(corAntiga.getGreen()*255)];
+				double acB = histAcB[(int)(corAntiga.getBlue()*255)];
+				
+				double pxR = ((qtTonsR-1)/n)*acR;
+				double pxG = ((qtTonsG-1)/n)*acG;
+				double pxB = ((qtTonsB-1)/n)*acB;
+				
+				double corR = (minR+pxR)/255;
+				double corG = (minG+pxG)/255;
+				double corB = (minB+pxB)/255;
+				
+				Color corNova = new Color(corR, corG, corB, corAntiga.getOpacity());
+				pw.setColor(i, j, corNova);
+			}
+		}
+		return wi;
+	}
+	
+	public static int[] histogramaCanal(Image img, String canal) {
+		int[] qt = new int[256];
+		
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		PixelReader pr = img.getPixelReader();
+		
+		if(canal == "R") {
+			for (int i = 0; i < w; i++) {
+				for (int j = 0; j < h; j++) {
+					qt[(int)(pr.getColor(i, j).getRed()*255)]++;
+				}
+			}
+		}else if (canal == "G") {
+			for (int i = 0; i < w; i++) {
+				for (int j = 0; j < h; j++) {
+					qt[(int)(pr.getColor(i, j).getGreen()*255)]++;
+				}
+			}
+		}else if (canal == "B") {
+			for (int i = 0; i < w; i++) {
+				for (int j = 0; j < h; j++) {
+					qt[(int)(pr.getColor(i, j).getBlue()*255)]++;
+				}
+			}
+		}
+		return qt;
+		
+	}
+	
+	private static int[] histogramaAc(int[] histograma) {
+		int total = 0;
+		int[] histogramaAc = new int[histograma.length];		
+		for (int i = 0; i < histogramaAc.length; i++) {			
+			histogramaAc[i] = total + histograma[i];
+			total = histogramaAc[i];
+		}
+		return histogramaAc;
+	}
+	
+	private static int qtTons(int[] histograma) {
+		int qt = 255;
+		for (int i = 0; i < histograma.length; i++) {
+			if (histograma[i] == 0) {
+				qt--;				
+			}
+		}
+		return qt;
+   	}
+
+	private static int pontoMin(int[] histograma) {
+		for (int i = 0; i < histograma.length; i++) {
+			if (histograma[i]>0) {
+				return i;
+			}
+		}
+		return 0;
+	}
+	
 }

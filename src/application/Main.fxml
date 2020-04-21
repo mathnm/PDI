@@ -227,7 +227,11 @@
             </TitledPane>
             <TitledPane animated="false" layoutX="10.0" layoutY="511.0" text="Equalização de Histograma">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="8.0" layoutY="40.0" mnemonicParsing="false" onAction="#equalizacao" text="Equalização (Todos os Pixels)" />
+                        <Button layoutX="13.0" layoutY="84.0" mnemonicParsing="false" onAction="#equalizacaoValida" text="Equalização (Pixels Válidos)" />
+                     </children></AnchorPane>
                </content>
             </TitledPane>
             <TitledPane animated="false" layoutX="10.0" layoutY="511.0" text="Teste">

@@ -261,4 +261,14 @@ public class MainController {
 		 }
 	 }
 	 
+	 @FXML void equalizacaoValida() {
+			img3 = Pdi.equalizacaoHistograma(img1, false);
+			atualizaImagem3();
+	}
+	 
+	 @FXML void equalizacao() {
+			img3 = Pdi.equalizacaoHistograma(img1, true);
+			atualizaImagem3();
+	}
+	 
 }
