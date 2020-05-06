@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
@@ -192,10 +193,10 @@ public class MainController {
 		 }
 	 }
 	 
-	 int x1;
-	 int y1;
-	 int x2;
-	 int y2;
+	 int x1 = 0;
+	 int y1 = 0;
+	 int x2 = 0;
+	 int y2 = 0;
 	 Pixel pInicio;
 	 Pixel pFinal;
 	 
@@ -270,5 +271,154 @@ public class MainController {
 			img3 = Pdi.equalizacaoHistograma(img1, true);
 			atualizaImagem3();
 	}
+	 
+	 //----------------------------------------Exercícios provas antigas----------------------------------------
+	 
+	 @FXML TextField nrColunasZebrado;
+	 
+	 @FXML
+	 public void zebrado() {
+		 int nrColunas = Integer.parseInt(nrColunasZebrado.getText());
+		 
+		 img3 = Pdi.zebrado(img1, nrColunas);
+		 atualizaImagem3();
+		 
+	 }
+
+	 
+	 @FXML Label resultado;
+	 
+	 @FXML
+	 public void verificaQuadrado() {
+		 resultado.setText(Pdi.verificaQuadrado(img1));
+	 }
+
+	 
+	 @FXML RadioButton vermelho;
+	 @FXML RadioButton verde;
+	 @FXML RadioButton amarelo;
+	 
+	 @FXML TextField largura;
+	 
+	 
+	 @FXML
+	 public void insereMoldura() {
+		 
+		 if(vermelho.isSelected()) {
+			 Color cor = Color.RED;
+			img3 = Pdi.insereMoldura(img1, cor, Integer.parseInt(largura.getText()));
+			atualizaImagem3();
+		 }
+		 if(verde.isSelected()) {
+			 Color cor = Color.GREEN;
+			img3 = Pdi.insereMoldura(img1, cor, Integer.parseInt(largura.getText()));
+			atualizaImagem3();
+		 }
+		 if(amarelo.isSelected()) {
+			 Color cor = Color.YELLOW;
+			img3 = Pdi.insereMoldura(img1, cor, Integer.parseInt(largura.getText()));
+			atualizaImagem3();
+		 }
+		 
+		 
+	 }
+	 
+	 @FXML
+	 public void filtroDuplo() {
+		 img3 = Pdi.filtroDuplo(img1);
+		 atualizaImagem3();
+	 }
+
+	 
+	 @FXML Label respostaForma;
+	 
+	 @FXML
+	 public void verificaForma() {
+		 if(Pdi.identificaForma(img1) == "q"){
+			respostaForma.setText("Quadrado");
+		 }else {
+			 respostaForma.setText("Círculo");
+		 }
+	 }
+	 
+	 
+	 @FXML TextField distanciaPixels;
+	 
+	 @FXML RadioButton vermelhoJaula;
+	 @FXML RadioButton verdeJaula;
+	 @FXML RadioButton amareloJaula;
+	 
+	 @FXML
+	 public void jaula() {
+		if(vermelhoJaula.isSelected()) {
+			img3 = Pdi.insereJaula(img1, Integer.parseInt(distanciaPixels.getText()), Color.RED);
+		}else 
+		
+		if(verdeJaula.isSelected()) {
+			 	img3 = Pdi.insereJaula(img1, Integer.parseInt(distanciaPixels.getText()), Color.GREEN);
+		} else 
+		
+		if(amareloJaula.isSelected()) {
+		 	img3 = Pdi.insereJaula(img1, Integer.parseInt(distanciaPixels.getText()), Color.YELLOW);
+		}	
+		
+		atualizaImagem3();
+		 
+	 }
+	 
+	 
+	 @FXML Label idCores;
+	 
+	 @FXML
+	 public void identificaCores() {
+		 if(x1 != 0 && x2 != 0 && y1 != 0 && y2 != 0) {
+			 idCores.setText(Pdi.identificaCores(img1, x1, x2, y1, y2));
+		 }
+	 }
+
+	 //PROVA
+	 
+	 @FXML Label abertoFechado;
+	 
+	 @FXML
+	 public void verificaRetangulo() {
+		 abertoFechado.setText(Pdi.verificaRetangulo(img1));
+	 }
+
+	 @FXML
+	 public void equalizaDiagonalPrincipal() {
+		 img3 = Pdi.equalizaDiagonalPrincipal(img1);
+		 atualizaImagem3();
+	 }
+	 
+	 
+	 @FXML CheckBox q1;
+	 @FXML CheckBox q2;
+	 @FXML CheckBox q3;
+	 @FXML CheckBox q4;
+	 
+	 @FXML
+	 public void inverteQuadrante() {
+		 boolean quad1 = false;
+		 boolean quad2 = false;
+		 boolean quad3 = false;
+		 boolean quad4 = false;
+		 
+		 if(q1.isSelected()) {
+			 quad1 = true;
+		 }
+		 if(q2.isSelected()) {
+			 quad2 = true;
+		 }
+		 if(q3.isSelected()) {
+			 quad3 = true;
+		 }
+		 if(q4.isSelected()) {
+			 quad4 = true;
+		 }
+		 
+		 img3 = Pdi.inverteQuadrante(img1, quad1, quad2, quad3, quad4);
+		 atualizaImagem3();
+	 }
 	 
 }

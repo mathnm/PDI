@@ -366,9 +366,23 @@ public class Pdi {
 					//LINHA INFERIOR
 					if (fim.y == j && fim.x >= i && inicio.x <= i) {
 						pw.setColor(i, j, marcacao);
-					}
+					}					
 				}
 			}
+			
+//			Tentativa de deixar a área selecionada de cabeça para baixo
+//			for (int i = inicio.x; i < fim.x; i++) {
+//				for (int j = inicio.y; j < fim.y; j++) {
+//					Color corA = pr.getColor(i, j);
+//					if(i < inicio.x || i > inicio.x) {
+//						pw.setColor(i, j, corN);
+//					}else	if(j < inicio.y || j > fim.y) {
+//						pw.setColor(i, j, corN);
+//					}
+//				}
+//			}
+			
+			
 			
 			return wi;
 			
@@ -519,6 +533,446 @@ public class Pdi {
 			}
 		}
 		return 0;
+	}
+	
+	//-------------------------------------------EXERCÍCIOS PROVAS ANTIGAS-------------------------------------------
+	
+	//Zebrado: 
+	public static Image zebrado (Image img, int nrColunas) {
+		
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		
+		PixelReader pr = img.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		
+		int widthColuna = (int)(w/nrColunas);
+		int colunaSomador = widthColuna;
+		double media;
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				Color corA = pr.getColor(i,j);
+				media = (corA.getRed()+corA.getGreen()+corA.getBlue())/3;
+				Color corN = new Color(media, media, media, corA.getOpacity());
+				if(i<widthColuna) {
+					pw.setColor(i, j, corN);
+				}else {
+					pw.setColor(i, j, corA);
+				}
+			}
+			if(i == (widthColuna*2)) {
+				widthColuna += colunaSomador+colunaSomador;
+			}
+		}
+		return wi;
+		
+	}
+	
+	public static String verificaQuadrado (Image img) {
+		
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		
+		PixelReader pr = img.getPixelReader();
+		
+		Color preto = Color.BLACK;
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				if(pr.getColor(i, j).equals(preto)) {
+					if(pr.getColor(i+1, j+1).equals(preto)) {
+						return "PREENCHIDO";
+					}else {
+						return "VAZIO";
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Image insereMoldura (Image img, Color cor, int largura) {
+		
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		
+		PixelReader pr = img.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		
+		
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+		
+				Color corOriginal = pr.getColor(i, j);
+				
+				if(i < largura) {
+					pw.setColor(i, j, cor);
+				}else 
+				
+				if(j < largura) {
+					pw.setColor(i, j, cor);
+				}else 
+				
+				if(i>=(w-largura)) {
+					pw.setColor(i, j, cor);
+				}else 
+				
+				if(j>=(h-largura)) {
+					pw.setColor(i, j, cor);
+				}else {
+					pw.setColor(i, j, corOriginal);
+				}
+				
+			}
+		}
+		
+		return wi;
+		
+	}
+	
+	public static Image filtroDuplo (Image img) {
+		
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		
+		PixelReader pr = img.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		
+		int meio = (int)(h/2);
+		
+		double media;
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				Color corA = pr.getColor(i, j);
+				media = (corA.getRed()+corA.getGreen()+corA.getBlue())/3;
+				if(j<meio) {
+					Color negativa = new Color (1 - corA.getRed(),
+											1 - corA.getGreen(),
+											1 - corA.getBlue(),
+											corA.getOpacity());
+					pw.setColor(i, j, negativa);
+				}else {
+					Color cinza = new Color(media, media, media, corA.getOpacity());
+					pw.setColor(i, j, cinza);
+				}
+			}
+		}
+		
+		return wi;
+		
+	}
+	
+	public static String identificaForma(Image img) {
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		
+		PixelReader pr = img.getPixelReader();
+		
+		Color preto = Color.BLACK;
+		
+		String resposta;
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				if(pr.getColor(i, j).equals(preto)) {
+					if(pr.getColor(i, j+1).equals(preto) &&  pr.getColor(i+1, j).equals(preto)) {
+						resposta = "q";
+						return resposta;
+					}else {
+						resposta = "c";
+						return resposta;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Image insereJaula(Image img, int distancia, Color cor) {
+		
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		
+		PixelReader pr = img.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		
+		int distanciaOriginal = distancia;
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				Color corOriginal = pr.getColor(i, j);
+				if(i>=distancia && i <= (distancia+3)) {
+					pw.setColor(i, j, cor);
+					if(i == distancia+3) {
+						distancia = distancia + distanciaOriginal;
+					}
+				}else {
+					pw.setColor(i, j, corOriginal);
+				}
+			}
+		}
+		
+		return wi;
+		
+	}
+	
+	public static String identificaCores(Image img, int x1, int x2, int y1, int y2) {
+			
+		PixelReader pr = img.getPixelReader();
+		
+		String resposta = "";
+		
+		boolean temVermelho = false;
+		boolean temAzul = false;
+		boolean temVerde = false;
+		
+		for (int i = x1; i < x2; i++) {
+			for (int j = y1; j < y2; j++) {
+				
+				if(pr.getColor(i, j).equals(Color.RED)) {
+					temVermelho = true;
+				}
+				if(pr.getColor(i, j).equals(Color.GREEN)) {
+					temVerde = true;
+				}
+				if(pr.getColor(i, j).equals(Color.BLUE)) {
+					temAzul = true;
+				}
+			}
+		}
+		
+		if(temAzul) {
+			resposta += "-azul-";
+		}
+		if(temVermelho) {
+			resposta += "-vermelho-";
+		}
+		if(temVerde) {
+			resposta += "-verde-";
+		}
+		
+		return resposta;
+	}
+	
+	//PROVA
+	
+	public static String verificaRetangulo(Image img) {
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		
+		PixelReader pr = img.getPixelReader();
+		
+		boolean primeiroPixelPreto = false;
+		int x1 = 0;
+		int y1 = 0;
+		int x2 = 0;
+		int y2 = 0;
+		String resposta = "fechado";
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				if(pr.getColor(i, j).equals(Color.BLACK) && !primeiroPixelPreto) {
+					x1 = i;
+					y1 = j;
+					primeiroPixelPreto = true;
+				}
+				if(j-1 >= 0 && i-1 >= 0 && i+1 < w && j+1 < h) {
+					if(pr.getColor(i, j+1).equals(Color.WHITE) && pr.getColor(i, j-1).equals(Color.BLACK) && pr.getColor(i+1, j).equals(Color.WHITE) && pr.getColor(i-1, j).equals(Color.BLACK)) {
+						x2 = i;
+						y2 = j;
+					}
+				}
+			}
+		}
+		
+		for (int i = x1; i <= x2; i++) {
+			for (int j = y1; j <= y2; j++) {
+				if(pr.getColor(x1, j).equals(Color.WHITE)) {
+					resposta = "aberto";
+				}
+				if(pr.getColor(x2, j).equals(Color.WHITE)) {
+					resposta = "aberto";
+				}
+			}
+			if(pr.getColor(i, y1).equals(Color.WHITE)) {
+				resposta = "aberto";
+			}
+			if(pr.getColor(i, y2).equals(Color.WHITE)) {
+				resposta = "aberto";
+			}
+		}
+		
+		return resposta;
+		
+	}
+	
+	public static Image equalizaDiagonalPrincipal(Image img) {
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		PixelReader pr = img.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		
+		
+		
+		int[] hR = histogramaCanal(img, "R");
+		int[] hG = histogramaCanal(img, "G");
+		int[] hB = histogramaCanal(img, "B");
+		
+		int[] histAcR = histogramaAc(hR);
+		int[] histAcG = histogramaAc(hG);
+		int[] histAcB = histogramaAc(hB);
+		
+		int qtTonsR = 255;
+		int qtTonsG = 255;
+		int qtTonsB = 255;
+		
+		double minR = 0;
+		double minG = 0;
+		double minB = 0;
+			
+		double n = w*h;
+		
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				if(i==j) {
+					pw.setColor(i, j, Color.BLACK);
+				}else if(i>j){
+					Color corAntiga = pr.getColor(i, j);
+				
+					double acR = histAcR[(int)(corAntiga.getRed()*255)];
+					double acG = histAcG[(int)(corAntiga.getGreen()*255)];
+					double acB = histAcB[(int)(corAntiga.getBlue()*255)];
+					
+					double pxR = ((qtTonsR-1)/n)*acR;
+					double pxG = ((qtTonsG-1)/n)*acG;
+					double pxB = ((qtTonsB-1)/n)*acB;
+					
+					double corR = (minR+pxR)/255;
+					double corG = (minG+pxG)/255;
+					double corB = (minB+pxB)/255;
+					
+					Color corNova = new Color(corR, corG, corB, corAntiga.getOpacity());
+					pw.setColor(i, j, corNova);
+				}else {
+					pw.setColor(i, j, pr.getColor(i, j));
+				}
+			}
+		}
+		return wi;
+	}
+	
+	public static Image inverteQuadrante(Image img, boolean q1, boolean q2, boolean q3, boolean q4) {
+		
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		PixelReader pr = img.getPixelReader();
+		WritableImage wi = new WritableImage(w, h);
+		PixelWriter pw = wi.getPixelWriter();
+		
+		if(q1) {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < height; j++) {
+					pw.setColor(i, j, pegaCorInversa(img, i, j));
+				}
+			}			
+		}else {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < height; j++) {
+					pw.setColor(i, j, pr.getColor(i, j));
+				}
+			}	
+		}
+		
+		if(q2) {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = width; i < w; i++) {
+				for (int j = 0; j < height; j++) {
+					pw.setColor(i, j, pegaCorInversa(img, i, j));
+				}
+			}			
+		}else {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = width; i < w; i++) {
+				for (int j = 0; j < height; j++) {
+					pw.setColor(i, j, pr.getColor(i, j));
+				}
+			}
+		}
+		
+		if(q3) {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = 0; i < width; i++) {
+				for (int j = height; j < h; j++) {
+					pw.setColor(i, j, pegaCorInversa(img, i, j));
+				}
+			}			
+		}else {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = 0; i < width; i++) {
+				for (int j = height; j < h; j++) {
+					pw.setColor(i, j, pr.getColor(i, j));
+				}
+			}	
+		}
+		
+		if(q4) {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = width; i < w; i++) {
+				for (int j = height; j < h; j++) {
+					pw.setColor(i, j, pegaCorInversa(img, i, j));
+				}
+			}			
+		}else {
+			int width = (int)(w/2);
+			int height = (int)(h/2);
+			
+			for (int i = width; i < w; i++) {
+				for (int j = height; j < h; j++) {
+					pw.setColor(i, j, pr.getColor(i, j));
+				}
+			}	
+		}
+		
+//		for (int i = 0; i < w; i++) {
+//			for (int j = 0; j < h; j++) {
+//				pw.setColor(i, j, pegaCorInversa(img, i, j));
+//			}
+//		}
+		
+		return wi;
+		
+	}
+	
+	public static Color pegaCorInversa(Image img, int width, int height) {
+		int w = (int)img.getWidth();
+		int h = (int)img.getHeight();
+		PixelReader pr = img.getPixelReader();
+		
+		return pr.getColor(w - 1 - width, h - 1 - height);
 	}
 	
 }
