@@ -1,5 +1,6 @@
 package view;
 
+
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.image.Image;
@@ -974,5 +975,6 @@ public class Pdi {
 		
 		return pr.getColor(w - 1 - width, h - 1 - height);
 	}
+	
 	
 }
